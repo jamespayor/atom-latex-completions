@@ -50,8 +50,6 @@ module.exports =
   getSuggestions: ({bufferPosition, editor, prefix}) ->
     line = editor.getTextInRange([[bufferPosition.row, 0], bufferPosition])
     prefix = line.match(@texPattern)?[1]
-    return new Promise (resolve) =>
-      if prefix?
-        resolve(({text: @completions[text], displayText: text, leftLabel, replacementPrefix: '\\'+prefix, score: @score(text, prefix, leftLabel)} for text, leftLabel of @completions).sort(@compare))
-      else
-        resolve([])
+    return new Promise((resolve) => if prefix? then resolve(
+      ({text: @completions[text], displayText: text, leftLabel, replacementPrefix: '\\'+prefix, score: @score(text, prefix, leftLabel)} for text, leftLabel of @completions).sort(@compare)
+    ) else resolve([]))

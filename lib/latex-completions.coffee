@@ -35,8 +35,8 @@ module.exports =
 
     @subscriptions = new CompositeDisposable
 
-    @subscriptions.add atom.config.observe 'latex-completions.customAliases', (path) =>
-      for path in path.split(',')
+    @subscriptions.add atom.config.observe 'latex-completions.customAliases', (paths) =>
+      for path in paths.split(',')
         provider.load(path)
 
   provide: -> provider
