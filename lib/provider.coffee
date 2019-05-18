@@ -6,7 +6,7 @@ module.exports =
   filterSuggestions: false
   suggestionPriority: 5
   inclusionPriority: 5
-  excludeLowerPriority: true
+  excludeLowerPriority: false
 
   textEditorSelectors: 'atom-text-editor'
   getTextEditorSelector: -> @textEditorSelectors
@@ -41,7 +41,6 @@ module.exports =
 
   compare: (a, b) ->
     diff = b.score - a.score
-
     if diff == 0
       a.leftLabel.localeCompare(b.leftLabel)
     else
@@ -50,6 +49,5 @@ module.exports =
   getSuggestions: ({bufferPosition, editor, prefix}) ->
     line = editor.getTextInRange([[bufferPosition.row, 0], bufferPosition])
     prefix = line.match(@texPattern)?[1]
-    return new Promise((resolve) => if prefix? then resolve(
-      ({text: @completions[text], displayText: text, leftLabel, replacementPrefix: '\\'+prefix, score: @score(text, prefix, leftLabel)} for text, leftLabel of @completions).sort(@compare)
-    ) else resolve([]))
+    return null unless prefix?
+    ({text: @completions[text], displayText: text, leftLabel, replacementPrefix: '\\'+prefix, score: @score(text, prefix, leftLabel)} for text, leftLabel of @completions).sort(@compare)
